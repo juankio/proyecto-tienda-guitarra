@@ -58,6 +58,7 @@
                                             <button
                                                 class="btn btn-danger"
                                                 type="button"
+                                                @click="$emit('eliminar-producto',producto.id)"
                                             >
                                                 X
                                             </button>
@@ -66,8 +67,11 @@
                                 </tbody>
                             </table>
 
-                            <p  class="text-end">Total pagar: <span class="fw-bold">$899</span></p>
-                            <button class="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                            <p  class="text-end">Total pagar: <span class="fw-bold">${{ totalPagar }}</span></p>
+                            <button class="btn btn-dark w-100 mt-3 p-2"
+                            type="button"
+                            @click="$emit('vaciar-carrito')"
+                            >Vaciar Carrito</button>
                         </div>
                       </div>
                     </div>
@@ -93,6 +97,7 @@
 </template>
 
 <script setup>
+import {computed} from 'vue'
 
 const props =defineProps({
     carrito:{
@@ -106,5 +111,8 @@ const props =defineProps({
 
     }) 
 
-defineEmits(['decrementar-cantidad','incrementar-cantidad','agregar-carrito'])
+defineEmits(['decrementar-cantidad','incrementar-cantidad','agregar-carrito','eliminar-producto','vaciar-carrito'])
+const totalPagar = computed (()=>{
+    return props.carrito.reduce((total,producto)=>total+(producto.cantidad* producto.precio),0)
+})
 </script>
